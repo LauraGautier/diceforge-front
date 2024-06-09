@@ -23,7 +23,7 @@ function Signup() {
   @formData - Le paramètre formData dans la fonction postUser est de type IUser,
    qui contient des données liées à un utilisateur, telles que leur nom,
    leur email, leur mot de passe, etc. Ces données sont ensuite envoyées en tant que
-   requête POST à http://localhost:5000/api/signup en utilisant Axios.
+   requête POST à http://localhost:3000/api/signup en utilisant Axios.
   */
   const postUser = async (formData: IUser) => {
     const response = await axiosInstance.post('/signup', formData);
