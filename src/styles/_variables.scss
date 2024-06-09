@@ -1,12 +1,12 @@
 @use 'sass:color';
 
 $color: #fff;
-$color-primary: #12303c;
-$color-blue: #2b5867;
-$color-orange: #b55923;
-$color-brun: #5a332f;
-$color-marron-sombre: #322124;
-$color-noir: #06090e;
+$color-primary: #734b33; // Brun foncé
+$color-blue: #274c5e; // Bleu foncé
+$color-orange: #ac6b26; // Orange
+$color-brun: #6b5638; // Brun moyen
+$color-marron-sombre: #4a3620; // Marron sombre
+$color-noir: #1e1e1e; // Noir
 
 $color-primary-light: color.scale($color-primary, $lightness: 20%);
 $color-primary-ultra-light: color.scale($color-primary, $lightness: 60%);
