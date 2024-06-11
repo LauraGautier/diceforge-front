@@ -34,6 +34,8 @@ const diceMaxValue: { [key: string]: number } = {
 function Game() {
   const { gameId } = useParams();
 
+  console.log('Je suis le gameId de GAME', gameId);
+
   const [timerRunning, setTimerRunning] = useState(false);
   const [timeElapsed, setTimeElapsed] = useState(60);
   const [selectedDice, setSelectedDice] = useState('d6');
@@ -51,11 +53,14 @@ function Game() {
   }, []);
 
   useEffect(() => {
+    console.log('Valeur de gameId:', gameId);
+
     const getGameById = async () => {
       try {
         const response = await axiosInstance.get(`/game/${gameId}`);
         if (response.status === 200) {
           setGame(response.data);
+          console.log('reponse du axios game', response);
         }
       } catch (error) {
         console.error('erreur lors de la récupération du jeu', error);
@@ -111,6 +116,7 @@ function Game() {
       <Container className="main-content">
         <div className="create-div-title">
           <h1 className="create-title">{game?.name}</h1>
+          <h2 className="create-subtitle">{game?.license_name}</h2>
         </div>
         <div className="timer-section">
           <div className="timer-controls">
@@ -142,7 +148,6 @@ function Game() {
           </div>
           <div className="dice-section-result">
             <Checkbox
-              className="dice-section-checkbox"
               label="Afficher le résultat aux autres joueurs"
               checked={showDiceResult}
               onChange={() => setShowDiceResult(!showDiceResult)}

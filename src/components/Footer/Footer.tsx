@@ -3,7 +3,7 @@ import './Footer.scss';
 function Footer() {
   return (
     <div className="Footer">
-      <footer>© 2024 Team Dice Forge inc.</footer>
+      <footer>© 2024 Dice Forge</footer>
     </div>
   );
 }

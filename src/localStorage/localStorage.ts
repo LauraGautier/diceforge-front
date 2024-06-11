@@ -1,9 +1,19 @@
-export function addTokenToLocalStorage() {
-  localStorage.setItem('bonjour', 'bonjour');
+export function addRefreshTokenToLocalStorage(
+  refreshToken: string,
+  user: {
+    userId: number;
+    lastname: string;
+    firstname: string;
+    image: string;
+  }
+) {
+  localStorage.setItem('refreshToken', refreshToken);
+  localStorage.setItem('user', JSON.stringify(user));
 }
 
-export function getTokenFromLocalStorage() {
-  const jwt = localStorage.getItem('jwt');
+export function getRefreshTokenFromLocalStorage() {
+  const refreshToken = localStorage.getItem('refreshToken')!;
+  const user = JSON.parse(localStorage.getItem('user')!);
 
-  return { jwt };
+  return { refreshToken, user };
 }

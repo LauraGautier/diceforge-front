@@ -80,11 +80,7 @@ function ResetPassword() {
             value={confirmPassword}
             onChange={(event) => setConfirmPassword(event.target.value)}
           />
-          <Button
-            type="submit"
-            content="Envoyer"
-            className="reset-password-submit-btn"
-          />
+          <Button type="submit" content="Envoyer" color="grey" />
         </Form>
       </div>
       <Footer />

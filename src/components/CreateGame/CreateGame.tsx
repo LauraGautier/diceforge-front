@@ -3,45 +3,55 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Dropdown, Form, FormInput } from 'semantic-ui-react';
 import { ILicenceOption } from '../../@Types/game';
 import axiosInstance from '../../axios/axios';
-import { useAppDispatch } from '../../hooks/hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { actionSetGameId } from '../../store/reducers/gameReducer';
+import { actionSearchGamesLicences } from '../../store/thunks/gamesThunks';
 import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
 import './CreateGame.scss';
 
 function CreateGame() {
+  const dispatch = useAppDispatch();
+
   const [title, setTitle] = useState('');
-  const [licences, setLicences] = useState<string>('');
+  // const [licences, setLicences] = useState<string>('');
   const [players, setPlayers] = useState<string[]>(['']);
   const [licenseOptions, setLicenseOptions] = useState<ILicenceOption[]>([]);
 
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    axiosInstance
-      .get('license')
-      .then((response) => {
-        const { data } = response;
+  // useEffect(() => {
+  //   axiosInstance
+  //     .get('license')
+  //     .then((response) => {
+  //       const { data } = response;
+  //       console.log('Licences:', data);
 
-        if (data) {
-          const options = data.map((license: ILicenceOption) => ({
-            key: license.id,
-            text: license.name,
-            value: license.name,
-          }));
-          setLicenseOptions(options);
-        } else {
-          setLicenseOptions([]);
-        }
-      })
-      .catch((error) => console.error('Erreur: ', error));
+  //       if (data) {
+  //         const options = data.map((license: ILicenceOption) => ({
+  //           key: license.id,
+  //           text: license.name,
+  //           value: license.name,
+  //         }));
+  //         setLicenseOptions(options);
+  //       } else {
+  //         setLicenseOptions([]);
+  //       }
+  //     })
+  //     .catch((error) => console.error('Erreur: ', error));
+  // }, []);
+
+  useEffect(() => {
+    dispatch(actionSearchGamesLicences());
   }, []);
+
+  const licences = useAppSelector((state) => state.game.licences);
 
   const postGame = async (formData: any) => {
     try {
       const response = await axiosInstance.post('/game', formData);
 
+      console.log('Success:', response.data);
       const gameId = response.data.id;
       dispatch(actionSetGameId({ gameId }));
       navigate(`/api/game/${gameId}`);
@@ -71,6 +81,7 @@ function CreateGame() {
       license_name: licences,
       email: email,
     };
+    console.log('Form data:', formData);
 
     postGame(formData);
   };

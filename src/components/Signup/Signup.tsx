@@ -1,66 +1,64 @@
 import { ChangeEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Form, FormInput } from 'semantic-ui-react';
-import { IUser } from '../../@Types/user';
-import axiosInstance from '../../axios/axios';
+import { useAppDispatch } from '../../hooks/hooks';
+import { actionChangeNewUser } from '../../store/reducers/authReducer';
+import {
+  actionCheckLogin,
+  actionRegister,
+} from '../../store/thunks/authThunks';
 import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
 import './Signup.scss';
 
 function Signup() {
+  const dispatch = useAppDispatch();
+
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
-  const [userFormData, setUserFormData] = useState<IUser>({
-    lastname: '',
-    firstname: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-  });
+  // const [userFormData, setUserFormData] = useState<IUser>({
+  //   lastname: '',
+  //   firstname: '',
+  //   email: '',
+  //   password: '',
+  //   confirmPassword: '',
+  // });
+  const [lastName, setLastName] = useState<string>('');
+  const [firstName, setFirstName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
+
   const navigate = useNavigate();
 
-  /**
-   * La fonction postUser envoie une requête POST à une URL spécifiée avec les données du formulaire et enregistre la réponse.
-  @formData - Le paramètre formData dans la fonction postUser est de type IUser,
-   qui contient des données liées à un utilisateur, telles que leur nom,
-   leur email, leur mot de passe, etc. Ces données sont ensuite envoyées en tant que
-   requête POST à http://localhost:3000/api/signup en utilisant Axios.
-  */
-  const postUser = async (formData: IUser) => {
-    const response = await axiosInstance.post('/signup', formData);
+  // const postUser = async (formData: IUser) => {
+  //   const response = await axiosInstance.post('/signup', formData);
+  //   console.log(response);
+  // };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    dispatch(actionChangeNewUser({ name: 'lastname', value: lastName }));
+    dispatch(actionChangeNewUser({ name: 'firstname', value: firstName }));
+    dispatch(actionChangeNewUser({ name: 'email', value: email }));
+    dispatch(actionChangeNewUser({ name: 'password', value: password }));
+    dispatch(
+      actionChangeNewUser({ name: 'confirmPassword', value: confirmPassword })
+    );
+    await dispatch(actionRegister());
+    await dispatch(actionCheckLogin());
+    navigate('/');
   };
 
-  /**
-   * La fonction handleSubmit empêche le comportement de soumission par défaut
-   * du formulaire, enregistre les données du formulaire utilisateur, et envoie les données à un serveur.
-   * @event - Le paramètre event dans la fonction handleSubmit est de type React.FormEvent<HTMLFormElement>.
-   * Ce paramètre représente l'événement de soumission du formulaire dans une application React.
-   * En appelant event.preventDefault(), vous empêchez le comportement de soumission par défaut du formulaire,
-   * ce qui vous permet de gérer la soumission du formulaire manuellement.
-   */
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    postUser(userFormData);
-    navigate('/api/login');
-  };
-
-  /**
-   * Fonction qui permet de changer la valeur du state au changement de l'input (input contrôlé)
-   * @param event - paramètres de la fonction qui contient la valeur de l'input
-   * @param {string} inputName - Le paramètre inputName dans la fonction handleChange
-   * est une chaîne de caractères qui représente le nom du champ de saisie qui a déclenché
-   * l'événement de changement. Il est utilisé comme clé pour mettre à jour la valeur
-   * correspondante dans l'objet d'état userFormData.
-   */
-  const handleChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    inputName: string
-  ) => {
-    event.preventDefault();
-    setUserFormData((previousData) => ({
-      ...previousData,
-      [inputName]: event.target.value,
-    }));
-  };
+  // const handleChange = (
+  //   event: React.ChangeEvent<HTMLInputElement>,
+  //   inputName: string
+  // ) => {
+  //   event.preventDefault();
+  //   setUserFormData((previousData) => ({
+  //     ...previousData,
+  //     [inputName]: event.target.value,
+  //   }));
+  // };
 
   const handleAvatarChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -84,7 +82,8 @@ function Signup() {
           iconPosition="left"
           label="Nom"
           placeholder="Nom"
-          onChange={(event) => handleChange(event, 'lastname')}
+          value={lastName}
+          onChange={(event) => setLastName(event.target.value)}
         />
         <FormInput
           className="signup-input"
@@ -93,7 +92,8 @@ function Signup() {
           label="Prénom"
           type="text"
           placeholder="Prénom"
-          onChange={(event) => handleChange(event, 'firstname')}
+          value={firstName}
+          onChange={(event) => setFirstName(event.target.value)}
         />
         <FormInput
           className="signup-input"
@@ -102,7 +102,8 @@ function Signup() {
           label="Email"
           type="email"
           placeholder="Email"
-          onChange={(event) => handleChange(event, 'email')}
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
         />
         <FormInput
           className="signup-input"
@@ -111,7 +112,8 @@ function Signup() {
           label="Mot de passe"
           type="password"
           placeholder="Mot de passe"
-          onChange={(event) => handleChange(event, 'password')}
+          value={password}
+          onChange={(event) => setPassword(event.target.value)}
         />
         <FormInput
           className="signup-input"
@@ -120,7 +122,8 @@ function Signup() {
           label="Confirmation"
           type="password"
           placeholder="Confirmation mot de passe"
-          onChange={(event) => handleChange(event, 'confirmPassword')}
+          value={confirmPassword}
+          onChange={(event) => setConfirmPassword(event.target.value)}
         />
 
         <Button content="Valider" type="submit" className="signup-form-btn" />

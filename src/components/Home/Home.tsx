@@ -5,7 +5,6 @@ import {
   ButtonGroup,
   ButtonOr,
   Container,
-  Icon,
   Image,
 } from 'semantic-ui-react';
 import { useAppSelector } from '../../hooks/hooks';
@@ -14,7 +13,7 @@ import Header from '../Header/Header';
 import './Home.scss';
 
 function Home() {
-  const isLogged = useAppSelector((state) => state.user.isLogged);
+  const isLogged = useAppSelector((state) => state.auth.isLogged);
   return (
     <div className="home">
       <Header />

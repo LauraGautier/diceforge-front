@@ -52,16 +52,19 @@ const CardItem: React.FC<Sheet> = ({
 function Binder() {
   const location = useLocation();
   const gameId = Number(location.state);
+  console.log('Je suis le urlGameId', gameId);
 
   const [sheets, setSheets] = useState<Sheet[]>([]);
 
   useEffect(() => {
     const getSheets = async () => {
       try {
+        console.log('Je suis dans le getSheets', axiosInstance);
+
         const response = await axiosInstance.get(
           'http://localhost:3000/api/binder'
         );
-
+        console.log('response de sheets', response);
         setSheets(response.data);
       } catch (error) {
         console.log('Erreur lors de la récupération des fiches', error);
@@ -73,32 +76,20 @@ function Binder() {
   return (
     <div className="binder">
       <Header />
-      <div className="binder-main-container">
-        <h1 className="binder-title">Classeur de fiches</h1>
-        <div className="binder-btn-group">
-          <NavLink to="/api/createsheet" state={gameId}>
-            <Button
-              className="binder-btn-createsheet"
-              content="Créer une fiche"
-            />
-          </NavLink>
-          <NavLink to="/api/game/">
-            <Button
-              className="binder-btn-backToGame"
-              content="Retour à la partie"
-            />
-          </NavLink>
-        </div>
-        <Container
-          className={sheets ? 'binder-container-hidden' : 'binder-container'}
-        >
-          <CardGroup>
-            {sheets.map((sheet) => (
-              <CardItem key={sheet.id} {...sheet} />
-            ))}
-          </CardGroup>
-        </Container>
-      </div>
+      <h1 className="binder-title">Classeur de fiches</h1>
+      <Container>
+        <CardGroup>
+          {sheets.map((sheet) => (
+            <CardItem key={sheet.id} {...sheet} />
+          ))}
+        </CardGroup>
+      </Container>
+      <NavLink to="/api/createsheet" state={gameId}>
+        <Button className="binder-btn-createsheet" content="Créer une fiche" />
+      </NavLink>
+      <NavLink to="/api/game/">
+        <Button content="Retour à la partie" />
+      </NavLink>
       <Footer />
     </div>
   );

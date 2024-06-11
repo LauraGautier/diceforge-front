@@ -2,7 +2,11 @@ import { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Button, Icon, Image } from 'semantic-ui-react';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import actionSearchGames from '../../store/thunks/gamesThunks';
+import { actionSetGameId } from '../../store/reducers/gameReducer';
+import {
+  actionDeleteGame,
+  actionSearchGames,
+} from '../../store/thunks/gamesThunks';
 import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
 import './Profile.scss';
@@ -11,32 +15,33 @@ function Profile() {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.auth.user);
   const games = useAppSelector((state) => state.game.games);
-  //const [games, setGames] = useState<IGames[]>([]);
+  // const [games, setGames] = useState<IGames[]>([]);
   // const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(actionSearchGames());
   }, []);
 
-  //useEffect(() => {
-  //const getGame = async () => {
-  //try {
-  // const response = await axiosInstance.get(`/profile/${userId}`);
-  // setGames(response.data);
-  // } catch (error) {
-  // console.log('error', error);
-  //}
-  // };
-  // getGame();
-  // }, [dispatch, userId]);
+  // useEffect(() => {
+  //   const getGame = async () => {
+  //     try {
+  //       const response = await axiosInstance.get(`/profile/${user.userId}`);
+  //       console.log('je suis la reponse du get de profile', response);
+  //       setGames(response.data);
+  //     } catch (error) {
+  //       console.log('error', error);
+  //     }
+  //   };
+  //   getGame();
+  // }, [user]);
 
   // const deleteGame = async (gameId: number) => {
-  // try {
-  // await axiosInstance.delete(`/game/${gameId}`);
-  // setGames((prevGames) => prevGames.filter((game) => game.id !== gameId));
-  // } catch (error) {
-  // console.log('Erreur lors de la suppression de la partie', error);
-  // }
+  //   try {
+  //     await axiosInstance.delete(`/game/${gameId}`);
+  //     setGames((prevGames) => prevGames.filter((game) => game.id !== gameId));
+  //   } catch (error) {
+  //     console.log('Erreur lors de la suppression de la partie', error);
+  //   }
   // };
 
   return (
@@ -55,7 +60,7 @@ function Profile() {
             <p>{user.firstname}</p>
           </div>
           <NavLink to="/api/edit-profile">
-            <Button content="Editer le profil" className="profile-user-btn" />
+            <Button content="Modifier le profil" className="profile-user-btn" />
           </NavLink>
         </div>
         <div className="game-session">
@@ -74,26 +79,27 @@ function Profile() {
                 <div className="profile-game-edit" key={game.id}>
                   <NavLink to="/api/edit-game">
                     <button type="button" className="profile-game-edit-btn">
-                      <Icon size="large" name="pencil" color="grey" />
+                      <Icon size="large" name="pencil" />
                     </button>
                   </NavLink>
                   <button
                     type="button"
                     className="profile-game-edit-btn"
-                    // onClick={() => deleteGame(game.id)}
+                    onClick={async () => {
+                      dispatch(actionSetGameId(game.id));
+                      await dispatch(actionDeleteGame());
+                    }}
                   >
-                    <Icon size="large" name="trash" color="grey" />
+                    <Icon size="large" name="trash" />
                   </button>
 
                   <NavLink to={`/api/game/${game.id}`}>
                     <p className="profile-game-name">{game.name}</p>
                   </NavLink>
-                  <div className="profile-game-url">
-                    <p className="profile-game-link">
-                      http://localhost:5173/api/game/
-                      {game.id}
-                    </p>
-                  </div>
+                  <p className="profile-game-link">
+                    http://localhost:5173/api/game/
+                    {game.id}
+                  </p>
                 </div>
               ))
             ) : (

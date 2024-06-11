@@ -14,7 +14,7 @@ function ForgotPassword() {
     event.preventDefault();
     try {
       const response = await axiosInstance.post('forgot-password', { email });
-
+      console.log(response);
       if (response.status === 200) {
         setMessage(response.data.message);
         setError(null);
@@ -44,11 +44,7 @@ function ForgotPassword() {
             className="forgot-password-input"
             onChange={(event) => setEmail(event.target.value)}
           />
-          <Button
-            type="submit"
-            content="Envoyer"
-            className="forgot-password-submit-btn"
-          />
+          <Button type="submit" content="Envoyer" color="grey" />
         </Form>
       </div>
       <Footer />

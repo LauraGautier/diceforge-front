@@ -1,11 +1,15 @@
 import { Route, Routes, useNavigate } from 'react-router-dom';
 
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import { addTokenJwtToAxiosInstance } from '../../axios/axios';
-import setupInterceptors from '../../axios/axiosInterceptors';
-import { useAppSelector } from '../../hooks/hooks';
-import { actionIsLogged } from '../../store/reducers/authReducer'; // Make sure the file path is correct and the necessary dependencies are installed.
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import { getRefreshTokenFromLocalStorage } from '../../localStorage/localStorage';
+import {
+  actionIsLogged,
+  actionSetRefreshToken,
+  actionSetUser,
+} from '../../store/reducers/authReducer';
+import { actionRefreshToken } from '../../store/thunks/authThunks';
 import Binder from '../Binder/Binder';
 import CreateGame from '../CreateGame/CreateGame';
 import CreateSheet from '../CreateSheet/CreateSheet';
@@ -22,18 +26,36 @@ import Signup from '../Signup/Signup';
 import './App.scss';
 
 function App() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.auth.user);
   const isLogged = useAppSelector((state) => state.auth.isLogged);
   // const gameReducer = useAppSelector((state) => state.game);
-  // const gameId = useAppSelector((state) => state.game.gameId);
+  // const gameId = useAppSelector((state) => state.game.games);
+  // console.log('je suis le state de gameId :', gameId);
+  // console.log('je suis le state de gameReducer :', gameReducer);
 
   console.log('je suis le state de app :', user);
   const navigate = useNavigate();
 
+  // async function refresh() {
+  //   await dispatch(actionRefreshToken());
+  // }
+
   useEffect(() => {
-    setupInterceptors(navigate);
-  }, [navigate]);
+    const refreshToken = getRefreshTokenFromLocalStorage().refreshToken;
+    const user = getRefreshTokenFromLocalStorage().user;
+
+    dispatch(actionSetRefreshToken(refreshToken));
+    dispatch(actionRefreshToken());
+    dispatch(
+      actionSetUser({
+        userId: user.userId,
+        lastname: user.lastname,
+        firstname: user.firstname,
+        image: user.image,
+      })
+    );
+  }, []);
 
   /* The `useEffect` hook in the provided code snippet is responsible for checking
   if a token is stored in the session storage. If a token is found, it adds the

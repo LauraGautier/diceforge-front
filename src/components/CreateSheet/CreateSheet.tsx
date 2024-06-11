@@ -33,6 +33,7 @@ interface SheetData {
 function CreateSheet() {
   const location = useLocation();
   const gameId = location.state;
+  console.log('urlGameId Navlink', gameId);
 
   const [characteristics, setCharacteristics] = useState<Characteristic[]>([
     { id: uuidv4(), name: '', value: '' },
@@ -49,6 +50,7 @@ function CreateSheet() {
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
 
   const userId = useAppSelector((state) => state.user.userId);
+  console.log('je suis le userId', userId);
 
   const dispatch = useAppDispatch();
 
@@ -56,7 +58,7 @@ function CreateSheet() {
     const getGame = async () => {
       try {
         const response = await axiosInstance.get(`/profile/${userId}`);
-
+        console.log('je suis la reponse du get de profile', response);
         setGames(response.data);
       } catch (error) {
         console.log('error', error);
@@ -68,6 +70,7 @@ function CreateSheet() {
   const postUserCreateSheet = async (datas: SheetData) => {
     try {
       const response = await axiosInstance.post('sheet', datas);
+      console.log('Success:', response.data);
     } catch (error) {
       console.error('Error:', error);
     }
@@ -152,6 +155,7 @@ function CreateSheet() {
       })),
     };
 
+    console.log('Form data:', datas);
     JSON.stringify(datas);
     postUserCreateSheet(datas);
   };
@@ -257,7 +261,7 @@ function CreateSheet() {
               />
               <Button
                 className="create-sheet-caracteristic-btn"
-                icon="close"
+                icon="minus"
                 onClick={() => handleRemoveCharacteristic(characteristic.id)}
               />
             </div>
@@ -306,7 +310,7 @@ function CreateSheet() {
                 />
                 <Button
                   className="create-sheet-inventory-btn"
-                  icon="close"
+                  icon="minus"
                   onClick={() => handleRemoveItem(item.id)}
                 />
               </div>

@@ -4,7 +4,7 @@ import gameReducer from './reducers/gameReducer';
 
 const store = configureStore({
   reducer: {
-    authReducer: authReducer,
+    auth: authReducer,
     game: gameReducer,
   },
 });
