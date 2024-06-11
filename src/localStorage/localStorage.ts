@@ -1,5 +1,5 @@
-export function addTokenToLocalStorage(token: string) {
-  localStorage.setItem('jwt', token);
+export function addTokenToLocalStorage() {
+  localStorage.setItem('bonjour', 'bonjour');
 }
 
 export function getTokenFromLocalStorage() {

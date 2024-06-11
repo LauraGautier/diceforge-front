@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { addTokenJwtToAxiosInstance } from '../../axios/axios';
 import setupInterceptors from '../../axios/axiosInterceptors';
 import { useAppSelector } from '../../hooks/hooks';
-import { actionIsLogged } from '../../store/reducers/userReducer';
+import { actionIsLogged } from '../../store/reducers/authReducer'; // Make sure the file path is correct and the necessary dependencies are installed.
 import Binder from '../Binder/Binder';
 import CreateGame from '../CreateGame/CreateGame';
 import CreateSheet from '../CreateSheet/CreateSheet';
@@ -23,19 +23,16 @@ import './App.scss';
 
 function App() {
   const dispatch = useDispatch();
-  const user = useAppSelector((state) => state.user);
-  const gameReducer = useAppSelector((state) => state.game);
-  const gameId = useAppSelector((state) => state.game.gameId);
+  const user = useAppSelector((state) => state.auth.user);
+  const isLogged = useAppSelector((state) => state.auth.isLogged);
+  // const gameReducer = useAppSelector((state) => state.game);
+  // const gameId = useAppSelector((state) => state.game.gameId);
 
+  console.log('je suis le state de app :', user);
   const navigate = useNavigate();
 
   useEffect(() => {
     setupInterceptors(navigate);
-
-    const token = sessionStorage.getItem('accessToken');
-    if (token) {
-      addTokenJwtToAxiosInstance(token);
-    }
   }, [navigate]);
 
   /* The `useEffect` hook in the provided code snippet is responsible for checking
@@ -45,14 +42,14 @@ function App() {
     const token = sessionStorage.getItem('accessToken');
     if (token) {
       addTokenJwtToAxiosInstance(token);
-      if (!user.isLogged) {
+      if (!isLogged) {
         const userData = sessionStorage.getItem('user');
         if (userData) {
           dispatch(actionIsLogged(JSON.parse(userData)));
         }
       }
     }
-  }, [dispatch, user.isLogged]);
+  }, [dispatch, isLogged]);
 
   return (
     <div className="App">

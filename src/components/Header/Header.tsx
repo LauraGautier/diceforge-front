@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { NavLink, Navigate, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { Icon } from 'semantic-ui-react';
 import { useAppSelector } from '../../hooks/hooks';
-import { actionUserLogOut } from '../../store/reducers/userReducer';
+import { actionUserLogOut } from '../../store/reducers/authReducer';
 import './Header.scss';
 
 function Header() {
@@ -12,7 +12,7 @@ function Header() {
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
-  const isLogged = useAppSelector((state) => state.user.isLogged);
+  const isLogged = useAppSelector((state) => state.auth.isLogged);
   const dispatch = useDispatch();
 
   const logout = () => {

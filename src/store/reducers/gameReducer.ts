@@ -1,15 +1,13 @@
 import { createAction, createReducer } from '@reduxjs/toolkit';
+import { IGames } from '../../@Types/game';
+import { actionSearchGames } from '../thunks/gamesThunks';
 
 export interface GameState {
-  gameId: number;
-  name: string;
-  gameUrl: string;
+  games: IGames[];
 }
 
 export const gameInitialState: GameState = {
-  gameId: 0,
-  name: '',
-  gameUrl: '',
+  games: [],
 };
 
 export const actionSetGameId = createAction<{ gameId: number }>('SET_GAME_ID');
@@ -20,14 +18,14 @@ export const actionSetGameUrl = createAction<{ gameUrl: string }>(
 
 const gameReducer = createReducer(gameInitialState, (builder) => {
   builder
-    .addCase(actionSetGameId, (state, action) => {
-      if (action.payload) {
-        state.gameId = action.payload.gameId;
-      }
+    .addCase(actionSearchGames.fulfilled, (state, action) => {
+      state.games = action.payload;
     })
     .addCase(actionSetGameUrl, (state, action) => {
+      console.log('je suis laction:', action.payload);
+      console.log('je suis le state:', state);
       if (action.payload) {
-        state.gameUrl = action.payload.gameUrl;
+        // state.gameUrl = action.payload.gameUrl;
       }
     });
 });
