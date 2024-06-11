@@ -7,7 +7,7 @@ Ce projet a été réalisé dans le cadre de la présentation au Titre Professio
 ### Cloner le Répertoire
 
     ```bash
-    git clone <repository-url>
+    git clone git@github.com:LauraGautier/diceforge-front.git
     cd <repository-directory>
     ```
 
