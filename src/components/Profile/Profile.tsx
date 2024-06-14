@@ -72,7 +72,7 @@ function Profile() {
               <NavLink to="/api/creategame">
                 <Button
                   className="profile-game-btn"
-                  content="Crée une partie"
+                  content="Créer une partie"
                 />
               </NavLink>
             </h2>
@@ -116,7 +116,7 @@ function Profile() {
             )}
           </div>
           <div className="profile-session">
-            <h2 className="profile-session-title">Session à venir :</h2>
+            <h2 className="profile-session-title">Sessions à venir :</h2>
             {games && games.length > 0 ? (
               games.map((game) => (
                 <div key={game.id} className="profile-session-edit">
@@ -128,7 +128,7 @@ function Profile() {
                 </div>
               ))
             ) : (
-              <p className="profile-game-edit-message">Aucune session</p>
+              <p className="profile-game-edit-message">Aucune session à venir</p>
             )}
           </div>
         </div>
