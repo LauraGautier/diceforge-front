@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Dropdown, Form, FormInput } from 'semantic-ui-react';
-import { ILicenceOption } from '../../@Types/game';
-import axiosInstance from '../../axios/axios';
+import { ILicences } from '../../@Types/game';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { actionSetGameId } from '../../store/reducers/gameReducer';
-import { actionSearchGamesLicences } from '../../store/thunks/gamesThunks';
+import { actionChangeGameDatas, actionResetCurrentGame } from '../../store/reducers/gameReducer';
+import {
+  actionPostGame,
+  actionSearchGamesLicences,
+} from '../../store/thunks/gameThunks';
 import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
 import './CreateGame.scss';
@@ -14,9 +16,8 @@ function CreateGame() {
   const dispatch = useAppDispatch();
 
   const [title, setTitle] = useState('');
-  // const [licences, setLicences] = useState<string>('');
-  const [players, setPlayers] = useState<string[]>(['']);
-  const [licenseOptions, setLicenseOptions] = useState<ILicenceOption[]>([]);
+  const [licence, setLicence] = useState<string>('');
+  const [email, setEmail] = useState('');
 
   const navigate = useNavigate();
 
@@ -43,47 +44,68 @@ function CreateGame() {
 
   useEffect(() => {
     dispatch(actionSearchGamesLicences());
+    dispatch(actionResetCurrentGame());
   }, []);
 
-  const licences = useAppSelector((state) => state.game.licences);
+  const game = useAppSelector((state) => state.game.currentGame);
 
-  const postGame = async (formData: any) => {
-    try {
-      const response = await axiosInstance.post('/game', formData);
-
-      console.log('Success:', response.data);
-      const gameId = response.data.id;
-      dispatch(actionSetGameId({ gameId }));
-      navigate(`/api/game/${gameId}`);
-    } catch (error) {
-      console.error('Error:', error);
+  useEffect(() => {
+    if (game.id !== 0) {
+      navigate(`/api/game/${game.id}`);
     }
-  };
+    console.log('useEffect : ', game);
+  }, [game]);
 
-  const handlePlayerChange = (index: number, value: string) => {
-    const newPlayers = [...players];
-    newPlayers[index] = value;
-    setPlayers(newPlayers);
+  const licences = useAppSelector((state) => state.game.licences);
+  const licencesOptions = licences.map((licence: ILicences) => {
+    return {
+      key: licence.id,
+      text: licence.name,
+      value: licence.name,
+    };
+  });
+  // licences.forEach((licence) => {
+  //   licenseOptions.push(licence);
+  //   setLicenseOptions(licenseOptions);
+  // });
+
+  // const postGame = async (formData: any) => {
+  //   try {
+  //     const response = await axiosInstance.post('/game', formData);
+
+  //     console.log('Success:', response.data);
+  //     const gameId = response.data.id;
+  //     dispatch(actionSetGameId({ gameId }));
+  //     navigate(`/api/game/${gameId}`);
+  //   } catch (error) {
+  //     console.error('Error:', error);
+  //   }
+  // };
+
+  /* const handlePlayerChange = (index: number, value: string) => {
+    const newEmails = [...emails];
+    newEmails[index] = value;
+    setEmails(newEmails);
   };
 
   const handleAddPlayer = () => {
-    setPlayers([...players, '']);
+    setEmails([...emails, '']);
   };
 
   const handleRemovePlayer = (index: number) => {
-    setPlayers(players.filter((_, i) => i !== index));
-  };
+    setEmails(emails.filter((_, i) => i !== index));
+  }; */
 
-  const handleSubmit = () => {
-    const email = players;
-    const formData = {
-      name: title,
-      license_name: licences,
-      email: email,
-    };
-    console.log('Form data:', formData);
-
-    postGame(formData);
+  const handleSubmit = async () => {
+    dispatch(actionChangeGameDatas({ name: 'name', value: title }));
+    dispatch(
+      actionChangeGameDatas({
+        name: 'license_name',
+        value: licence,
+      })
+    );
+    dispatch(actionChangeGameDatas({ name: 'email', value: email }));
+    await dispatch(actionPostGame());
   };
 
   return (
@@ -92,7 +114,7 @@ function CreateGame() {
       <div className="create-game-content">
         <h1 className="create-game-title">Créer ta partie</h1>
         <div className="create-game-form">
-          <Form>
+          <Form onSubmit={handleSubmit}>
             <FormInput
               className="create-game-input"
               label="Nom de la partie"
@@ -108,19 +130,21 @@ function CreateGame() {
                 className="create-game-licences-input"
                 placeholder="Licence"
                 selection
-                options={licenseOptions}
-                value={licences}
-                onChange={(e, { value }) => setLicences(value as string)}
+                options={licencesOptions}
+                value={licence}
+                onChange={(e, { value }) => setLicence(value as string)}
               />
             </label>
-            {players.map((player, index) => (
+            {/* {emails.map((email, index) => (
               <Form.Field key={index} className="create-game-form-field">
                 <FormInput
                   className="create-game-input"
                   label="Ajouter un joueur"
                   placeholder="Ajouter un joueur"
-                  value={player}
-                  onChange={(e) => handlePlayerChange(index, e.target.value)}
+                  value={email}
+                  onChange={(e) => {
+                    handlePlayerChange(index, e.target.value);
+                  }}
                   icon="at"
                   iconPosition="left"
                 />
@@ -132,18 +156,25 @@ function CreateGame() {
                   />
                 )}
               </Form.Field>
-            ))}
-            <Button
+            ))} */}
+
+            <FormInput
+              className="create-game-input"
+              label="Email du joueur"
+              placeholder="Email du joueur"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              icon="at"
+              iconPosition="left"
+            />
+
+            {/* <Button
               onClick={handleAddPlayer}
               icon="plus"
               className="create-game-add-player-btn"
-            />
+            /> */}
             <div className="submit-container">
-              <Button
-                onClick={handleSubmit}
-                className="create-game-submit-btn"
-                content="Valider"
-              />
+              <Button className="create-game-submit-btn" content="Valider" />
             </div>
           </Form>
         </div>

@@ -1,5 +1,4 @@
 import { ChangeEvent, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import 'semantic-ui-css/semantic.min.css';
 import { Button, Form, FormInput, FormTextArea } from 'semantic-ui-react';
 import { v4 as uuidv4 } from 'uuid';
@@ -31,8 +30,9 @@ interface SheetData {
 }
 
 function CreateSheet() {
-  const location = useLocation();
-  const gameId = location.state;
+  // const location = useLocation();
+  // const gameId = location.state;
+  const gameId = useAppSelector((state) => state.game.currentGame.id);
   console.log('urlGameId Navlink', gameId);
 
   const [characteristics, setCharacteristics] = useState<Characteristic[]>([
@@ -49,7 +49,7 @@ function CreateSheet() {
   const [license, setLicense] = useState<string>('');
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
 
-  const userId = useAppSelector((state) => state.user.userId);
+  const userId = useAppSelector((state) => state.auth.user.userId);
   console.log('je suis le userId', userId);
 
   const dispatch = useAppDispatch();

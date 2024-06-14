@@ -7,3 +7,7 @@ export function getAccessTokenFromSessionStorage() {
 
   return { accessToken };
 }
+
+export function resetSessionStorage() {
+  sessionStorage.removeItem('accessToken');
+}

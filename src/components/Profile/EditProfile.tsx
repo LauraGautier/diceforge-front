@@ -21,7 +21,7 @@ function EditProfile() {
     <div className="editprofile">
       <Header />
       <div className="editprofile-page">
-        <h1 className="editprofile-title">Edit profile</h1>
+        <h1 className="editprofile-title">Edition du profil</h1>
         <Form className="editprofile-form">
           <input
             className="editprofile-input"
@@ -62,7 +62,7 @@ function EditProfile() {
             label="Confirmation mot de passe"
             placeholder="Confirmation mot de passe"
           />
-          <Button content="Valider" color="red" />
+          <Button className="editprofile-btn" content="Valider" />
         </Form>
       </div>
       <Footer />

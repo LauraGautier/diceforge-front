@@ -17,3 +17,9 @@ export function getRefreshTokenFromLocalStorage() {
 
   return { refreshToken, user };
 }
+
+
+export function resetLocalStorage() {
+  localStorage.removeItem('refreshToken');
+  localStorage.removeItem('user');
+}

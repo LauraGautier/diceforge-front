@@ -36,12 +36,12 @@ function EditGame() {
     <div className="edit-game">
       <Header />
       <div className="edit-game-page">
-        <h1 className="edit-game-title">Réglage de la partie</h1>
+        <h1 className="edit-game-title">Réglages de la partie</h1>
         <Form className="edit-game-form">
           <FormInput
             className="edit-game-input"
             label="Nom de la partie"
-            placeholder="partie 1"
+            placeholder="Partie 1"
             icon="game"
             iconPosition="left"
             value={game}
@@ -52,7 +52,7 @@ function EditGame() {
           {players.map((player, index) => (
             <Form.Field key={index}>
               <FormInput
-                label="Ajouter un jouer"
+                label="Ajouter un joueur"
                 placeholder="Ajouter un joueur"
                 iconPosition="left"
                 value={player}
@@ -61,20 +61,17 @@ function EditGame() {
               />
               {index > 0 && (
                 <Button
+                  className="edit-game-close-btn"
                   onClick={() => handleRemovePlayer(index)}
-                  icon="minus"
-                  negative
-                  compact
+                  icon="close"
                 />
               )}
             </Form.Field>
           ))}
 
           <Button
-            className=""
+            className="edit-game-btn"
             onClick={handleAddPlayer}
-            primary
-            compact
             icon="plus"
           />
           <FormInput
@@ -108,7 +105,7 @@ function EditGame() {
               }}
             ></input>
           </label>
-          <Button content="Modifier" color="red" />
+          <Button content="Modifier" className="edit-game-submit-btn" />
         </Form>
       </div>
       <Footer />

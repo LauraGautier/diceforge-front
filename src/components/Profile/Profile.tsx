@@ -2,11 +2,11 @@ import { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Button, Icon, Image } from 'semantic-ui-react';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { actionSetGameId } from '../../store/reducers/gameReducer';
+import { actionResetCurrentGame, actionSetGameId } from '../../store/reducers/gameReducer';
 import {
   actionDeleteGame,
   actionSearchGames,
-} from '../../store/thunks/gamesThunks';
+} from '../../store/thunks/gameThunks';
 import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
 import './Profile.scss';
@@ -20,6 +20,8 @@ function Profile() {
 
   useEffect(() => {
     dispatch(actionSearchGames());
+    dispatch(actionResetCurrentGame());
+    
   }, []);
 
   // useEffect(() => {
@@ -60,7 +62,7 @@ function Profile() {
             <p>{user.firstname}</p>
           </div>
           <NavLink to="/api/edit-profile">
-            <Button content="Modifier le profil" className="profile-user-btn" />
+            <Button content="Editer le profil" className="profile-user-btn" />
           </NavLink>
         </div>
         <div className="game-session">
@@ -79,7 +81,7 @@ function Profile() {
                 <div className="profile-game-edit" key={game.id}>
                   <NavLink to="/api/edit-game">
                     <button type="button" className="profile-game-edit-btn">
-                      <Icon size="large" name="pencil" />
+                      <Icon size="large" name="pencil" color="grey" />
                     </button>
                   </NavLink>
                   <button
@@ -90,16 +92,23 @@ function Profile() {
                       await dispatch(actionDeleteGame());
                     }}
                   >
-                    <Icon size="large" name="trash" />
+                    <Icon size="large" name="trash" color="grey" />
                   </button>
 
-                  <NavLink to={`/api/game/${game.id}`}>
+                  <NavLink
+                    to={`/api/game/${game.id}`}
+                    onClick={() => {
+                      dispatch(actionSetGameId(game.id));
+                    }}
+                  >
                     <p className="profile-game-name">{game.name}</p>
                   </NavLink>
-                  <p className="profile-game-link">
-                    http://localhost:5173/api/game/
-                    {game.id}
-                  </p>
+                  <div className="profile-game-url">
+                    <p className="profile-game-link">
+                      http://localhost:5173/api/game/
+                      {game.id}
+                    </p>
+                  </div>
                 </div>
               ))
             ) : (

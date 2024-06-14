@@ -3,13 +3,9 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { addTokenJwtToAxiosInstance } from '../../axios/axios';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { getRefreshTokenFromLocalStorage } from '../../localStorage/localStorage';
 import {
-  actionIsLogged,
-  actionSetRefreshToken,
-  actionSetUser,
+  actionIsLogged
 } from '../../store/reducers/authReducer';
-import { actionRefreshToken } from '../../store/thunks/authThunks';
 import Binder from '../Binder/Binder';
 import CreateGame from '../CreateGame/CreateGame';
 import CreateSheet from '../CreateSheet/CreateSheet';
@@ -21,7 +17,7 @@ import Login from '../Login/Login';
 import EditProfile from '../Profile/EditProfile';
 import Profile from '../Profile/Profile';
 import ResetPassword from '../Reset-password/Reset-password';
-import Sheet from '../Sheet/Sheet';
+// import Sheet from '../Sheet/Sheet';
 import Signup from '../Signup/Signup';
 import './App.scss';
 
@@ -34,28 +30,13 @@ function App() {
   // console.log('je suis le state de gameId :', gameId);
   // console.log('je suis le state de gameReducer :', gameReducer);
 
-  console.log('je suis le state de app :', user);
   const navigate = useNavigate();
 
   // async function refresh() {
   //   await dispatch(actionRefreshToken());
   // }
 
-  useEffect(() => {
-    const refreshToken = getRefreshTokenFromLocalStorage().refreshToken;
-    const user = getRefreshTokenFromLocalStorage().user;
-
-    dispatch(actionSetRefreshToken(refreshToken));
-    dispatch(actionRefreshToken());
-    dispatch(
-      actionSetUser({
-        userId: user.userId,
-        lastname: user.lastname,
-        firstname: user.firstname,
-        image: user.image,
-      })
-    );
-  }, []);
+ 
 
   /* The `useEffect` hook in the provided code snippet is responsible for checking
   if a token is stored in the session storage. If a token is found, it adds the
@@ -82,7 +63,7 @@ function App() {
         <Route path="/api/creategame" element={<CreateGame />} />
         <Route path="/api/game/:gameId" element={<Game />} />
         <Route path="/api/createsheet" element={<CreateSheet />} />
-        <Route path="/api/sheet" element={<Sheet />} />
+        {/* <Route path="/api/sheet" element={<Sheet />} /> */}
         <Route path="/api/binder/:gameId" element={<Binder />} />
         <Route path="/api/profile" element={<Profile />} />
         <Route path="/api/forgot-password" element={<ForgotPassword />} />

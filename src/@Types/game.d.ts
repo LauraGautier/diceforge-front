@@ -5,16 +5,19 @@ export interface IInputField {
   value: string;
 }
 
-export interface ILicenceOption {
+export interface ILicences {
   id: number;
   name: string;
 }
 
 export interface IGames {
-  id: number;
-  name: string;
-  music: string | null;
-  note: string | null;
+  created_at: string;
   event: string | null;
+  id: number;
+  invitation_token: string | null;
   license_name: string;
+  music: string | null;
+  name: string;
+  note: string | null;
+  updated_at: string | null;
 }

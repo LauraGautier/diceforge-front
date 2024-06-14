@@ -1,15 +1,24 @@
 import { createAction, createReducer } from '@reduxjs/toolkit';
-import { IGames, ILicenceOption } from '../../@Types/game';
+import { IGames, ILicences } from '../../@Types/game';
 import {
   actionDeleteGame,
+  actionGetGameById,
+  actionPostGame,
   actionSearchGames,
   actionSearchGamesLicences,
-} from '../thunks/gamesThunks';
+} from '../thunks/gameThunks';
 
 export interface GameState {
   games: IGames[];
   gameId: number;
-  licences: ILicenceOption[];
+  licences: ILicences[];
+  gameDatas: {
+    name: string;
+    license_name: String;
+    email: string;
+  };
+  currentGame: IGames;
+  gameUrl: string;
   error: string;
 }
 
@@ -17,14 +26,42 @@ export const gameInitialState: GameState = {
   games: [],
   gameId: 0,
   licences: [],
+  gameDatas: {
+    name: '',
+    license_name: '',
+    email: '',
+  },
+  currentGame: {
+    created_at: '',
+    event: null,
+    id: 0,
+    invitation_token: null,
+    license_name: '',
+    music: null,
+    name: '',
+    note: null,
+    updated_at: null,
+  },
+  gameUrl: '',
   error: '',
 };
+
+export const actionResetCurrentGame = createAction('RESET_CURRENT_GAME');
+
+export const actionChangeGameDatas = createAction<{
+  name: 'name' | 'license_name' | 'email';
+  value: string;
+}>('CHANGE_GAME_DATAS');
 
 export const actionSetGameId = createAction<number>('SET_GAME_ID');
 
 export const actionSetGameUrl = createAction<{ gameUrl: string }>(
   'SET_GAME_URL'
 );
+
+export const actionPushEmail = createAction<string>('PUSH_EMAIL');
+
+export const actionRemoveEmail = createAction<string>('REMOVE_EMAIL');
 
 const gameReducer = createReducer(gameInitialState, (builder) => {
   builder
@@ -40,10 +77,42 @@ const gameReducer = createReducer(gameInitialState, (builder) => {
     .addCase(actionSearchGamesLicences.fulfilled, (state, action) => {
       state.licences = action.payload;
     })
-    .addCase(actionSetGameUrl, (state, action) => {
-      console.log('je suis l action :', action.payload);
-      console.log('je suis le state reducer :', state);
+    .addCase(actionSearchGamesLicences.rejected, (state, action) => {
+      state.error = action.error.message || 'error';
+    })
+    .addCase(actionChangeGameDatas, (state, action) => {
+      state.gameDatas[action.payload.name] = action.payload.value;
+    })
+    .addCase(actionPostGame.fulfilled, (state, action) => {
+      // console.log(
+      //   "bonjour c'est moi le fullfiled de l'action de ses morts.",
+      //   action
+      // );
 
+      state.currentGame = action.payload.createdGame;
+      // console.log('Je suis le state de currentGame ', state.currentGame);
+    })
+    .addCase(actionResetCurrentGame, (state) => {
+      state.currentGame = {
+        created_at: '',
+        event: null,
+        id: 0,
+        invitation_token: null,
+        license_name: '',
+        music: null,
+        name: '',
+        note: null,
+        updated_at: null,
+      };
+    })
+    .addCase(actionGetGameById.fulfilled, (state, action) => {
+      console.log('je suis l action :', action);
+
+      state.currentGame = action.payload;
+
+      console.log('je suis le state reducer :', state.currentGame);
+    })
+    .addCase(actionSetGameUrl, (state, action) => {
       if (action.payload) {
         // state.gameUrl = action.payload.gameUrl;
       }

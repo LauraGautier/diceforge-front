@@ -23,7 +23,7 @@ function Chat({ gameUrl }: { gameUrl: string }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [newTabType, setNewTabType] = useState('');
 
-  const userName = useAppSelector((state) => state.user.firstname);
+  const userName = useAppSelector((state) => state.auth.user.firstname);
 
   const socket = useRef<Socket | null>(null);
 

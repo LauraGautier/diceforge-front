@@ -12,6 +12,17 @@ export interface Item {
   quantity: number;
 }
 
+export interface ISheet {
+  class: string;
+  created_at: string;
+  game_id: number | null;
+  id: number;
+  image?: string;
+  level: number;
+  name: string;
+  updated_at: string | null;
+}
+
 declare module 'uuid' {
   export function v4(): string;
 }

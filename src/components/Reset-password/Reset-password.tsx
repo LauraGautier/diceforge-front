@@ -1,18 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button, Form, FormInput, Message } from 'semantic-ui-react';
-import axiosInstance from '../../axios/axios';
+import { useAppDispatch } from '../../hooks/hooks';
+import { actionChangePassword } from '../../store/reducers/authReducer';
+import { actionResetPassword } from '../../store/thunks/authThunks';
 import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
 import './Reset-password.scss';
 
 function ResetPassword() {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+ 
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
-  const location = useLocation();
+  // const location = useLocation();
 
   const query = new URLSearchParams(location.search);
   const token = query.get('token');
@@ -30,23 +36,15 @@ function ResetPassword() {
       setError('Lien de réinitialisation invalide');
       return;
     }
-    try {
-      const response = await axiosInstance.post('reset-password', {
-        token,
-        id,
-        password,
-        confirmPassword,
-      });
-      if (response.status === 200) {
-        setMessage(response.data.message);
-        setError(null);
-        navigate('/api/login');
-      }
-    } catch (err) {
-      console.error('Error:', err);
-      setError('Une erreur est survenue. Veuillez réessayer.');
-      setMessage(null);
-    }
+    dispatch(actionChangePassword({
+      token: token,
+      id: parseInt(id),
+      password: password,
+      confirmPassword: confirmPassword,
+    }));
+    dispatch(actionResetPassword());
+    navigate('/api/login');
+   
   };
 
   return (
@@ -68,7 +66,7 @@ function ResetPassword() {
             className="reset-password-input"
             type="password"
             value={password}
-            onChange={(event) => setPassword(event.target.value)}
+            onChange={(event) => setPassword((event.target.value))}
           />
           <FormInput
             label="Confirmation mot de passe"
@@ -80,7 +78,11 @@ function ResetPassword() {
             value={confirmPassword}
             onChange={(event) => setConfirmPassword(event.target.value)}
           />
-          <Button type="submit" content="Envoyer" color="grey" />
+          <Button
+            type="submit"
+            content="Envoyer"
+            className="reset-password-submit-btn"
+          />
         </Form>
       </div>
       <Footer />

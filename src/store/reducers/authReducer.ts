@@ -3,11 +3,14 @@ import {
   addTokenJwtToAxiosInstance,
   removeTokenJwtFromAxiosInstance,
 } from '../../axios/axios';
-import { addAccessTokenToSessionStorage } from '../../sessionStorage/sessionStorage';
+import { resetLocalStorage } from '../../localStorage/localStorage';
+import { addAccessTokenToSessionStorage, resetSessionStorage } from '../../sessionStorage/sessionStorage';
 import {
   actionCheckLogin,
+  actionForgotPassword,
   actionRefreshToken,
   actionRegister,
+  actionResetPassword,
 } from '../thunks/authThunks';
 
 export interface UserState {
@@ -32,6 +35,13 @@ export interface UserState {
   error: string;
   isLogged: boolean;
   refreshToken: string;
+  email: string;
+  resetPassword: {
+    token: string
+    id: number
+    password: string
+    confirmPassword: string
+  }
 }
 
 export const userInitialState: UserState = {
@@ -56,6 +66,13 @@ export const userInitialState: UserState = {
   error: '',
   isLogged: false,
   refreshToken: '',
+  email: '',
+  resetPassword: {
+    token: '',
+    id: 0,
+    password: '',
+    confirmPassword: '',
+  },
 };
 
 export const actionSetRefreshToken = createAction<string>('SET_REFRESH_TOKEN');
@@ -87,6 +104,17 @@ export const actionIsLogged = createAction<{
 
 export const actionUserLogOut = createAction('USER_LOGOUT');
 
+export const actionSetForgotPasswordEmail = createAction<string>(
+  'SET_FORGOT_PASSWORD_EMAIL'
+);
+
+export const actionChangePassword = createAction<{
+  token: string
+  id: number
+  password: string
+  confirmPassword: string
+}>('RESET_PASSWORD');
+
 const authReducer = createReducer(userInitialState, (builder) => {
   builder
     .addCase(actionSetRefreshToken, (state, action) => {
@@ -108,6 +136,24 @@ const authReducer = createReducer(userInitialState, (builder) => {
         firstname: '',
         image: '',
       };
+    })
+    .addCase(actionSetForgotPasswordEmail, (state, action) => {
+      state.email = action.payload;
+    })
+    .addCase(actionForgotPassword.fulfilled, (state, action) => {
+      state.message = action.payload;
+    })
+    .addCase(actionForgotPassword.rejected, (state, action) => {
+      state.error =  'email rejeté';
+    })
+    .addCase(actionChangePassword, (state, action) => {
+      state.resetPassword = action.payload;
+    })
+    .addCase(actionResetPassword.fulfilled, (state, action) => {
+      state.message = action.payload.message;
+    })
+    .addCase(actionResetPassword.rejected, (state, action) => {
+      state.error = action.error.message || 'error';
     })
     .addCase(actionSetUser, (state, action) => {
       state.user = action.payload;
@@ -166,9 +212,8 @@ const authReducer = createReducer(userInitialState, (builder) => {
         firstname: '',
         image: '',
       };
-      sessionStorage.removeItem('user');
-      sessionStorage.removeItem('accessToken');
-      sessionStorage.removeItem('refreshToken');
+      resetLocalStorage();
+      resetSessionStorage();
       removeTokenJwtFromAxiosInstance();
     });
 });

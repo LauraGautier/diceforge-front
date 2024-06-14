@@ -55,4 +55,36 @@ const actionRefreshToken = createAsyncThunk(
   }
 );
 
-export { actionCheckLogin, actionRefreshToken, actionRegister };
+const actionForgotPassword = createAsyncThunk(
+  'auth/FORGOT_PASSWORD',
+  async (_, thunkAPI) => {
+    const state = thunkAPI.getState() as RootState;
+    const response = await axiosInstance.post('forgot-password', {
+      email: state.auth.email,
+    });
+    const message = response.data.message;
+
+    return message;
+  }
+);
+
+const actionResetPassword = createAsyncThunk('auth/RESET_PASSWORD', async (_, thunkAPI) => {
+  const state = thunkAPI.getState() as RootState;
+  const response = await axiosInstance.post('reset-password', {
+    token: state.auth.resetPassword.token,
+    id: state.auth.resetPassword.id,
+    password: state.auth.resetPassword.password,
+    confirmPassword: state.auth.resetPassword.confirmPassword,
+  });
+  console.log('je suis la reponse du reset password', response);
+  return response.data;
+  
+});
+
+export {
+  actionCheckLogin,
+  actionForgotPassword,
+  actionRefreshToken,
+  actionRegister,
+  actionResetPassword
+};
