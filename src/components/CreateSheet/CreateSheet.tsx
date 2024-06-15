@@ -165,7 +165,6 @@ function CreateSheet() {
       <Header />
       <h1 className="create-sheet-title">Création de Fiche</h1>
       <div className="create-sheet-content">
-        <h2 className="create-sheet-subtitle">Fiche Personnage</h2>
         <Form className="create-sheet-form">
           <div>
             <div>

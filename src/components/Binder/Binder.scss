@@ -21,7 +21,7 @@
     color: v.$color-blue;
     background-color: v.$color;
     border-radius: 1.5rem;
-    border: 5px solid v.$color-blue;
+    border: 5px solid v.$color-primary;
   }
   &-main-container {
     display: flex;
@@ -30,8 +30,10 @@
     align-items: center;
   }
 }
+
 div.ui.cards {
   margin: 1rem;
+  justify-content: center;
 }
 .ui.container.binder-container {
   border: 1px solid v.$color-primary;
@@ -43,11 +45,13 @@ div.ui.cards {
 button.ui.button.binder-btn-createsheet {
   color: v.$color;
   background-color: v.$color-orange;
+  margin: 1rem;
 }
 
 button.ui.button.binder-btn-backToGame {
   color: v.$color;
   background-color: v.$color-orange;
+  margin: 1rem;
 }
 
 @media (max-width: 580px) {

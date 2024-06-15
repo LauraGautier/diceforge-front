@@ -73,7 +73,6 @@ function Binder() {
   return (
     <div className="binder">
       <Header />
-      <h1 className="binder-title-sheet">{sheetName}</h1>
       <h1 className="binder-title">Classeur de fiches</h1>
       <Container>
         <CardGroup className="binder-card-container">
