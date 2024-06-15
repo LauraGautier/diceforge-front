@@ -233,8 +233,8 @@ function CreateSheet() {
             <div className="create-sheet-caracteristic" key={characteristic.id}>
               <FormInput
                 className="create-sheet-input"
-                label="Choix des caractéristiques :"
-                placeholder="Nom de la caractéristique"
+                label="Caractéristique :"
+                placeholder="Nom"
                 value={characteristic.name}
                 onChange={(e: ChangeEvent<HTMLInputElement>) =>
                   handleCharacteristicChange(
@@ -248,7 +248,7 @@ function CreateSheet() {
                 label="Valeur :"
                 className="create-sheet-input-value"
                 type="number"
-                placeholder="Valeur"
+                placeholder="Entre -5 et 5"
                 value={characteristic.value}
                 onChange={(e: ChangeEvent<HTMLInputElement>) =>
                   handleCharacteristicChange(
