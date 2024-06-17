@@ -34,14 +34,8 @@ function ForgotPassword() {
   return (
     <div className="forgot-password">
       <Header />
-      <h1>{storeEmail}</h1>
-      <h1>{message}</h1>
       <h1>{error}</h1>
       <h1 className="forgot-password-title">Mot de passe oublié ?</h1>
-      <p className="forgot-password-text">
-        Vous allez recevoir un e-mail allant vous permettre de modifier votre
-        mot de passe.
-      </p>
       {message && <Message success content={message} />}
       {error && <Message negative content={error} />}
       <div className="forgot-password-form">

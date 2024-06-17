@@ -51,9 +51,6 @@ function ResetPassword() {
     <div className="reset-password">
       <Header />
       <h1 className="reset-password-title">Réinitialiser votre mot de passe</h1>
-      <p className="reset-password-text">
-        Veuillez choisir un nouveau mot de passe.
-      </p>
       {message && <Message success content={message} />}
       {error && <Message negative content={error} />}
       <div className="reset-password-form">

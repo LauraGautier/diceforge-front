@@ -75,7 +75,6 @@ function Login() {
   return (
     <div className="login">
       <Header />
-      <h1>{message}</h1>
       <h1 className="login-title">Connexion</h1>
       <div className="login-form">
         {!isHidden &&
