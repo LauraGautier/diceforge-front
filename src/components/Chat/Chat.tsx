@@ -122,12 +122,7 @@ function Chat({ gameUrl }: { gameUrl: string }) {
           />
         ) : (
           messages[activeTab].map((msg) => (
-            <div /* The `key={uuid()}` in the component's rendering is generating a
-            unique identifier for each element in the list. In React, when
-            rendering a list of elements, each element should have a unique
-            `key` prop assigned to it. This helps React efficiently update
-            the UI by identifying which items have changed, are added, or
-            are removed. */
+            <div
               key={uuid()}
               className="chat-message"
             >
