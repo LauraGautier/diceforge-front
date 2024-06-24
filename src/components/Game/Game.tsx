@@ -42,7 +42,6 @@ function Game() {
   const currentGame = useAppSelector((state) => state.game.currentGame);
   const gameId = useAppSelector((state) => state.game.gameId);
   const gameUrl = useAppSelector((state) => state.game.gameUrl);
-  const [game, setGame] = useState<IGames>();
  
 
 
@@ -181,3 +180,6 @@ function Game() {
 }
 
 export default Game;
+
+
+
