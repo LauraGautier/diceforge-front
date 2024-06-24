@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { Route, Routes, useNavigate } from 'react-router-dom';
 
 import { useEffect } from 'react';
@@ -20,10 +19,6 @@ import Profile from '../Profile/Profile';
 import ResetPassword from '../Reset-password/Reset-password';
 // import Sheet from '../Sheet/Sheet';
 import Signup from '../Signup/Signup';
-=======
-import logo from '../../assets/logo.svg';
-
->>>>>>> master
 import './App.scss';
 
 function App() {
@@ -61,7 +56,6 @@ function App() {
 
   return (
     <div className="App">
-<<<<<<< HEAD
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/api/login" element={<Login />} />
@@ -77,24 +71,6 @@ function App() {
         <Route path="/api/edit-profile" element={<EditProfile />} />
         <Route path="/api/edit-game" element={<EditGame />} />
       </Routes>
-=======
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-
-        <p>
-          Edit <code>src/components/App/App.tsx</code> and save to reload.
-        </p>
-
-        <a
-          className="App-link"
-          href="https://react.dev/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
->>>>>>> master
     </div>
   );
 }
